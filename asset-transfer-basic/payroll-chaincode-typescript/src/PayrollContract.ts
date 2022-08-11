@@ -22,7 +22,7 @@ export class PayrollContract extends Contract {
                 Surname:"Akande",
                 Lastname: "David",
                 InitialName: "some-values",
-                DateOfBirth: new Date(),
+                DateOfBirth: new Date().toString(),
                 Address:"some-address",
                 PostCode:"345-tr345",
                 PayrollId:"asdafadf",
@@ -40,7 +40,7 @@ export class PayrollContract extends Contract {
                 Title: "Mr",
                 Surname:"Oluwatosin",
                 Lastname: "Akande",
-                DateOfBirth: new Date(),
+                DateOfBirth: new Date().toString(),
                 Address:"some-address2",
                 PostCode:"345-tr3452",
                 PayrollId:"asdafadf2",
@@ -57,7 +57,7 @@ export class PayrollContract extends Contract {
                 Title: "Mr",
                 Surname:"Sammy",
                 Lastname: "Akande",
-                DateOfBirth: new Date(),
+                DateOfBirth: new Date().toString(),
                 Address:"some-address3",
                 PostCode:"345-tr34524",
                 PayrollId:"asdafadf26",
@@ -68,16 +68,17 @@ export class PayrollContract extends Contract {
         ];
 
         for (const data of payrollData) {
-            await ctx.stub.putState(data.ID, Buffer.from(JSON.stringify(payrollData)));
+            await ctx.stub.putState(data.ID, Buffer.from(JSON.stringify(data)));
             console.info(`PayrollData ${data.ID} initialized`);
         }
     }
 
     // CreateAsset issues a new asset to the world state with given details.
     @Transaction()
-    public async CreateAsset(ctx: Context, payrollData:PayrollData[]): Promise<void> {
+    public async CreateAsset(ctx: Context, datas: string): Promise<void> {
+        const payrollData = JSON.parse(datas);
         for (const data of payrollData) {
-            await ctx.stub.putState(data.ID, Buffer.from(JSON.stringify(payrollData)));
+            await ctx.stub.putState(data.ID, Buffer.from(JSON.stringify(data)));
             console.info(`PayrollData ${data.ID} initialized`);
         }
     }
@@ -94,7 +95,8 @@ export class PayrollContract extends Contract {
 
     // UpdateAsset updates an existing asset in the world state with provided parameters.
     @Transaction()
-    public async UpdateAsset(ctx: Context, payrollData: PayrollData): Promise<void> {
+    public async UpdateAsset(ctx: Context, data: string): Promise<void> {
+        const payrollData = JSON.parse(data);
         const exists = await this.AssetExists(ctx, payrollData.ID);
         if (!exists) {
             throw new Error(`The asset ${payrollData.ID} does not exist`);

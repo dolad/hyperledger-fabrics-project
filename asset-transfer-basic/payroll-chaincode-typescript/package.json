@@ -1,7 +1,7 @@
 {
-    "name": "asset-transfer-basic",
+    "name": "payroll-chaincode-typescript",
     "version": "1.0.0",
-    "description": "Asset Transfer Basic contract implemented in TypeScript",
+    "description": "Payroll chaincode smart contract TypeScript",
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",
     "engines": {

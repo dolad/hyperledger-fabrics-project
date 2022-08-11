@@ -121,42 +121,98 @@ async function main() {
             // Now let's try to submit a transaction.
             // This will be sent to both peers and if both peers endorse the transaction, the endorsed proposal will be sent
             // to the orderer to be committed by each of the peer's to the channel ledger.
-            console.log('\n--> Submit Transaction: CreateAsset, creates new asset with ID, color, owner, size, and appraisedValue arguments');
-            await contract.submitTransaction('CreateAsset', 'asset13', 'yellow', '5', 'Tom', '1300');
+            console.log('\n--> Submit Transaction: CreateNewPayroll, creates new payroll');
+
+            const payrollData = [
+                {
+                    ID: 'payrollID12',
+                    HmrcOfficeNumber: 'some-digit-12345',
+                    EmployeePayeeReference: "some-refereece",
+                    Owner: "some-name_id",
+                    AccountOfficeReference: "some-reference-for-acount",
+                    NationalInsuranceNumber: "national-insurance-data",
+                    Title: "Mr",
+                    Surname:"Akande",
+                    Lastname: "David",
+                    InitialName: "some-values",
+                    DateOfBirth: new Date().toString(),
+                    Address:"some-address",
+                    PostCode:"345-tr345",
+                    PayrollId:"asdafadf",
+                    TaxReduction:20,
+                    Salary: 457678
+    
+                },
+                {
+                    ID: 'payrollID16',
+                    HmrcOfficeNumber: 'some-digit-123c34',
+                    EmployeePayeeReference: "some-refereece",
+                    Owner: "some-name_id2",
+                    AccountOfficeReference: "some-reference-for-acount2",
+                    NationalInsuranceNumber: "national-insurance-data2",
+                    Title: "Mr",
+                    Surname:"Oluwatosin",
+                    Lastname: "Akande",
+                    DateOfBirth: new Date().toString(),
+                    Address:"some-address2",
+                    PostCode:"345-tr3452",
+                    PayrollId:"asdafadf2",
+                    TaxReduction:1045,
+                    Salary: 45767,
+                },
+                {
+                    ID: 'payrollID17',
+                    HmrcOfficeNumber: 'some-digit-123c333',
+                    EmployeePayeeReference: "some-refereece33",
+                    Owner: "some-name_id33",
+                    AccountOfficeReference: "some-reference-for-acount42",
+                    NationalInsuranceNumber: "national-insurance-data42",
+                    Title: "Mr",
+                    Surname:"Sammyed",
+                    Lastname: "Akandeda",
+                    DateOfBirth: new Date().toString(),
+                    Address:"some-address32",
+                    PostCode:"345-tr345243",
+                    PayrollId:"asdafadf26e",
+                    TaxReduction:1043,
+                    Salary: 457348
+                },
+            ];
+
+            await contract.submitTransaction('CreateAsset', JSON.stringify(payrollData));
             console.log('*** Result: committed');
 
             console.log('\n--> Evaluate Transaction: ReadAsset, function returns an asset with a given assetID');
-            result = await contract.evaluateTransaction('ReadAsset', 'asset13');
+            result = await contract.evaluateTransaction('ReadAsset', 'payrollID2');
             console.log(`*** Result: ${prettyJSONString(result.toString())}`);
 
             console.log('\n--> Evaluate Transaction: AssetExists, function returns "true" if an asset with given assetID exist');
-            result = await contract.evaluateTransaction('AssetExists', 'asset1');
+            result = await contract.evaluateTransaction('AssetExists', 'payrollID2');
+           
             console.log(`*** Result: ${prettyJSONString(result.toString())}`);
 
             console.log('\n--> Submit Transaction: UpdateAsset asset1, change the appraisedValue to 350');
-            await contract.submitTransaction('UpdateAsset', 'asset1', 'blue', '5', 'Tomoko', '350');
+            const updatAsset =  {
+                ID: 'payrollID2',
+                HmrcOfficeNumber: 'some-digit-123c333',
+                EmployeePayeeReference: "some-refereece33",
+                Owner: "some-name_id33",
+                AccountOfficeReference: "some-reference-for-acount42",
+                NationalInsuranceNumber: "national-insurance-data42",
+                Title: "Mr",
+                Surname:"New Owner",
+                Lastname: "Oluwatosin",
+                DateOfBirth: new Date().toString(),
+                Address:"some-address32",
+                PostCode:"345-tr345243",
+                PayrollId:"asdafadf26e",
+                TaxReduction:1043,
+                Salary: 457348
+            };
+            await contract.submitTransaction('UpdateAsset', JSON.stringify(updatAsset));
             console.log('*** Result: committed');
-
             console.log('\n--> Evaluate Transaction: ReadAsset, function returns "asset1" attributes');
-            result = await contract.evaluateTransaction('ReadAsset', 'asset1');
-            console.log(`*** Result: ${prettyJSONString(result.toString())}`);
-
-            try {
-                // How about we try a transactions where the executing chaincode throws an error
-                // Notice how the submitTransaction will throw an error containing the error thrown by the chaincode
-                console.log('\n--> Submit Transaction: UpdateAsset asset70, asset70 does not exist and should return an error');
-                await contract.submitTransaction('UpdateAsset', 'asset70', 'blue', '5', 'Tomoko', '300');
-                console.log('******** FAILED to return an error');
-            } catch (error) {
-                console.log(`*** Successfully caught the error: \n    ${error}`);
-            }
-
-            console.log('\n--> Submit Transaction: TransferAsset asset1, transfer to new owner of Tom');
-            await contract.submitTransaction('TransferAsset', 'asset1', 'Tom');
-            console.log('*** Result: committed');
-
-            console.log('\n--> Evaluate Transaction: ReadAsset, function returns "asset1" attributes');
-            result = await contract.evaluateTransaction('ReadAsset', 'asset1');
+            result = await contract.evaluateTransaction('ReadAsset', 'payrollID2');
             console.log(`*** Result: ${prettyJSONString(result.toString())}`);
         } finally {
             // Disconnect from the gateway when the application is closing

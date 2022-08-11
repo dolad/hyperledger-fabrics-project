@@ -35,9 +35,9 @@ export class PayrollData {
     public Lastname: string;
 
     @Property()
-    public InitialName: string;
+    public InitialName?: string;
     @Property()
-    public DateOfBirth: Date;
+    public DateOfBirth: string;
     
     @Property()
     public Address: string;
